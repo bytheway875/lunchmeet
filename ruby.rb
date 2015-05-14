@@ -7,6 +7,13 @@ get '/' do
   ' of the twilio-ruby library.'
 end
 
+get 'receive_messages' do
+  twiml = Twilio::TwiML::Response.new do |r|
+    r.Message "Hey Monkey. Thanks for the message!"
+  end
+  twiml.text
+end
+
 get '/test_message' do
   account_sid = ENV['TWILIO_SID']
   auth_token = ENV['TWILIO_AUTH']
