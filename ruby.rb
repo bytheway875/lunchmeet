@@ -10,8 +10,8 @@ end
 
 get '/receive_messages' do
   twiml = Twilio::TwiML::Response.new do |r|
-    response = ParseText.new(params[:body]).response
-    r.Message "Hey monkey. Did this just totally break?"
+    response = ParseText.new(params[:Body]).response
+    r.Message response
   end
   twiml.text
 end

@@ -15,7 +15,7 @@ class ParseText
   end
 
   def find_event
-    happy_hour = /(happy hour|happyhour|drinks|drink)/.match(body).to_a.first ? 'happy hour' : nil
+    happy_hour = /(happy hour|happyhour|drinks|drink)/.match(body.downcase).to_a.first ? 'happy hour' : nil
     lunch = /(lunch|food|a meal)/.match(body).to_a.first ? 'lunch' : nil if @event.nil?
     @event = happy_hour || lunch
   end
@@ -27,7 +27,7 @@ class ParseText
     when date == Date.today + 1
       "tomorrow"
     else
-      "on" + date.strftime("%m/%d/%Y")
+      "on " + date.strftime("%m/%d/%Y")
     end
   end
 
