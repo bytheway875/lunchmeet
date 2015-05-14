@@ -1,10 +1,21 @@
 require 'rubygems'
 require 'sinatra'
 require 'twilio-ruby'
+require 'sinatra/activerecord'
+require 'yaml'
+require './models/models.rb'
+
+DB_CONFIG = YAML::load(File.open('config/database.yml'))
+
+set :database, "mysql://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
+
 
 get '/' do
-  'Hello World! Currently running version ' + Twilio::VERSION + \
-  ' of the twilio-ruby library.'
+    'Hello World! Currently running version ' + Twilio::VERSION + \
+    ' of the twilio-ruby library.'
+
+    #@users = Users.all
+    #erb :index
 end
 
 get 'receive_messages' do
