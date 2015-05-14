@@ -7,7 +7,7 @@ get '/' do
   ' of the twilio-ruby library.'
 end
 
-get 'receive_messages' do
+get '/receive_messages' do
   twiml = Twilio::TwiML::Response.new do |r|
     r.Message "Hey Monkey. Thanks for the message!"
   end
