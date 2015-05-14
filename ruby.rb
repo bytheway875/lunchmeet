@@ -8,8 +8,8 @@ get '/' do
 end
 
 get '/send_message' do
-    account_sid = "AC58c149db53a8075bb3785f448ae3876d"
-    auth_token = "3f0abae5327dc6cca36a56abb33b82a5"
+    account_sid = ENV['TWILIO_SID']
+    auth_token = ENV['TWILIO_AUTH']
     client = Twilio::REST::Client.new account_sid, auth_token
     
     from = "+18327421825" # Your Twilio number
@@ -26,4 +26,8 @@ get '/send_message' do
                                        )
                                        puts "Sent message to #{value}"
     end
+end
+
+get '/incoming_message_example' do
+
 end
