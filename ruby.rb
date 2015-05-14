@@ -34,7 +34,5 @@ get '/test_message' do
         :body => "Hey #{value}, Monkey party at 6PM. Bring Bananas!"
     )
   end
-
   "Texts sent"
-
 end
