@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'twilio-ruby'
+require './parse_text'
 
 get '/' do
   'Hello World! Currently running version ' + Twilio::VERSION + \
@@ -9,8 +10,8 @@ end
 
 get '/receive_messages' do
   twiml = Twilio::TwiML::Response.new do |r|
-    body = params[:Body]
-    r.Message "Hey Monkey. Thanks for telling me: #{body}!"
+    body = params[:body]
+    r.Message ParseText.new(body).response
   end
   twiml.text
 end
