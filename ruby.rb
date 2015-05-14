@@ -9,7 +9,8 @@ end
 
 get '/receive_messages' do
   twiml = Twilio::TwiML::Response.new do |r|
-    r.Message "Hey Monkey. Thanks for the message!"
+    body = params[:Body]
+    r.Message "Hey Monkey. Thanks for telling me: #{body}!"
   end
   twiml.text
 end
@@ -26,8 +27,6 @@ get '/test_message' do
       "+15205088375" => "Lakeida"
   }
   friends.each do |key, value|
-    puts "key"
-    puts "value"
     client.account.messages.create(
         :from => from,
         :to => key,
