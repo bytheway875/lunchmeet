@@ -30,6 +30,11 @@ get 'receive_messages' do
         r.Message "okay, we'll find someone to hang out with you."
       end
     end
+  elsif sms_count > 2
+    session['counter'] = 0
+    twiml = Twilio::TwiML::Response.new do |r|
+      r.Message "we're resetting your session. something messed up."
+    end
   end
 
   twiml.text
