@@ -1,31 +1,59 @@
 require 'rubygems'
 require 'sinatra'
 require 'twilio-ruby'
-require 'sinatra/activerecord'
-require 'yaml'
-require './models/user.rb'
+require 'data_mapper'
+require 'dm-migrations'
+require './models/models.rb'
+require 'sinatra/flash'
+require 'sinatra/redirect_with_flash'
 
-@DB_CONFIG = YAML::load(File.open('config/database.yml'))
-
-
- #set :database, "mysql://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
-#set :database, "{adapter: mysql2, host: #{DB_CONFIG['host']}, port: #{DB_CONFIG['port']}, database: #{DB_CONFIG['database']}, username: #{DB_CONFIG['username']}, password: #{DB_CONFIG['password']} }" 
-
-ActiveRecord::Base.establish_connection(
-  adapter: "#{@DB_CONFIG['adapter']}", 
-  host: "#{@DB_CONFIG['host']}",
-  database: "#{@DB_CONFIG['database']}",
-  username: "#{@DB_CONFIG['username']}",
-  password: "#{@DB_CONFIG['password']}")
+enable :sessions
 
 
-get '/' do
-    'Hello World! Currently running version ' + Twilio::VERSION + \
-    ' of the twilio-ruby library.'
+get '/?' do
+    
+    @title = 'Welcome to LunchMeet'
+    @twilio_version = Twilio::VERSION
 
-    #@users = Users.all
-    #erb :index
+    @users = User.all
+    erb :"users/index"
 end
+
+get "/users/new" do
+ @title = "Enter your information to join."
+ @user = User.new
+ erb :"users/new"
+end
+
+post "/users" do
+ @user = User.new(params[:user])
+ if @user.save
+   redirect "users/#{@user.id}", :notice => 'Congrats! You are now a member.'
+ else
+   erb :"users/new", :error => 'Something went wrong. Try again.'
+ end
+end
+
+
+get "/users/:id" do
+  @user = User.find(params[:id])
+  @title = "Member"
+  erb :"users/show"
+end
+
+# edit user
+get "/users/:id/edit" do
+  @user = User.find(params[:id])
+  @title = "Edit Member"
+  erb :"users/edit"
+end
+
+put "/users/:id" do
+  @user = User.find(params[:id])
+  @user.update(params[:user])
+  redirect "/users/#{@user.id}"
+end
+
 
 get 'receive_messages' do
   twiml = Twilio::TwiML::Response.new do |r|
