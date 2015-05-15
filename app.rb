@@ -2,8 +2,9 @@ require 'rubygems'
 require 'sinatra'
 require 'twilio-ruby'
 require './parse_text'
-require './config/environments'
 require 'sinatra/activerecord'
+require './config/environments'
+
 
 
 enable :sessions
