@@ -3,11 +3,20 @@ require 'sinatra'
 require 'twilio-ruby'
 require 'sinatra/activerecord'
 require 'yaml'
-require './models/models.rb'
+require './models/user.rb'
 
-DB_CONFIG = YAML::load(File.open('config/database.yml'))
+@DB_CONFIG = YAML::load(File.open('config/database.yml'))
 
-set :database, "mysql://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
+
+ #set :database, "mysql://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
+#set :database, "{adapter: mysql2, host: #{DB_CONFIG['host']}, port: #{DB_CONFIG['port']}, database: #{DB_CONFIG['database']}, username: #{DB_CONFIG['username']}, password: #{DB_CONFIG['password']} }" 
+
+ActiveRecord::Base.establish_connection(
+  adapter: "#{@DB_CONFIG['adapter']}", 
+  host: "#{@DB_CONFIG['host']}",
+  database: "#{@DB_CONFIG['database']}",
+  username: "#{@DB_CONFIG['username']}",
+  password: "#{@DB_CONFIG['password']}")
 
 
 get '/' do
