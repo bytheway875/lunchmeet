@@ -33,9 +33,9 @@ class ParseText
 
   def response
     if event && readable_date
-      "So you want to go to #{event} #{readable_date}?"
+      { message: "So you want to go to #{event} #{readable_date}?", event: event, date: date, valid: true }
     else
-      "Sorry I didn't catch that. Can you tell me again?"
+      { message: "Sorry I didn't catch that. Can you tell me again?", valid: false }
     end
   end
 end
