@@ -3,16 +3,20 @@ require 'sinatra'
 require 'twilio-ruby'
 require './parse_text'
 
+enable :sessions
+
 get '/' do
   'Hello World! Currently running version ' + Twilio::VERSION + \
   ' of the twilio-ruby library.'
 end
 
 get '/receive_messages' do
+  sms_count = session['counter'] ||= 1
   twiml = Twilio::TwiML::Response.new do |r|
     response = ParseText.new(params[:Body]).response
-    r.Message response
+    r.Message response + " This is message #{sms_count}"
   end
+  session['counter'] += 1
   twiml.text
 end
 
