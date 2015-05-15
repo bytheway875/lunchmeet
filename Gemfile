@@ -3,3 +3,7 @@ ruby "2.1.2"
 gem 'sinatra'
 gem 'twilio-ruby'
 gem 'chronic'
+gem "sinatra-activerecord"
+gem "mysql2"
+gem "rake"
+gem "pg"
