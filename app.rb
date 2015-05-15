@@ -1,42 +1,52 @@
 require 'rubygems'
 require 'sinatra'
 require 'twilio-ruby'
-require 'sinatra/activerecord'
-require 'yaml'
-require './models/user.rb'
 require './parse_text'
-register Sinatra::ActiveRecordExtension
-enable 'sessions'
-
-@DB_CONFIG = YAML::load(File.open('config/database.yml'))
+require './config/environments'
+require 'sinatra/activerecord'
 
 
-# set :database, "mysql://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
-# set :database, "{adapter: mysql2, host: #{DB_CONFIG['host']}, port: #{DB_CONFIG['port']}, database: #{DB_CONFIG['database']}, username: #{DB_CONFIG['username']}, password: #{DB_CONFIG['password']} }"
-
-ActiveRecord::Base.establish_connection(
-  adapter: "#{@DB_CONFIG['adapter']}", 
-  host: "#{@DB_CONFIG['host']}",
-  database: "#{@DB_CONFIG['database']}",
-  username: "#{@DB_CONFIG['username']}",
-  password: "#{@DB_CONFIG['password']}")
-
+enable :sessions
 
 get '/' do
-    'Hello World! Currently running version ' + Twilio::VERSION + \
-    ' of the twilio-ruby library.'
-
-    #@users = Users.all
-    #erb :index
+  'Hello World! Currently running version ' + Twilio::VERSION + \
+  ' of the twilio-ruby library.'
 end
 
-get 'receive_messages' do
+get '/receive_messages' do
   sms_count = session['counter'] ||= 1
-  twiml = Twilio::TwiML::Response.new do |r|
-    response = ParseText.new(params[:Body]).response
-    r.Message response + " This is message #{sms_count}"
+
+  body = params[:Body]
+
+  if sms_count == 1
+    response = ParseText.new(body).response
+    twiml = Twilio::TwiML::Response.new do |r|
+      r.Message response[:message]
+    end
+    if response[:valid]
+      session['counter'] += 1
+      session['date'] = response[:date]
+      session['event'] = response[:event]
+    end
+  elsif sms_count == 2
+    if body.downcase == 'yes'
+      twiml = Twilio::TwiML::Response.new do |r|
+        r.Message "okay, we'll find someone to hang out with you for #{session['event']} on #{session['date']}."
+      end
+    session['counter'] += 1
+    else
+      twiml = Twilio::TwiML::Response.new do |r|
+        r.Message "okay, then tell me what you want to do."
+      end
+      session['counter'] = 1
+    end
+  elsif sms_count > 2
+    session['counter'] = 1
+    twiml = Twilio::TwiML::Response.new do |r|
+      r.Message "we're resetting your session. something messed up."
+    end
   end
-  session['counter'] += 1
+
   twiml.text
 end
 
@@ -52,8 +62,6 @@ get '/test_message' do
       "+15205088375" => "Lakeida"
   }
   friends.each do |key, value|
-    puts "key"
-    puts "value"
     client.account.messages.create(
         :from => from,
         :to => key,
@@ -62,4 +70,5 @@ get '/test_message' do
   end
 
   "Texts sent"
+
 end

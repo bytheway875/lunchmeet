@@ -4,6 +4,5 @@ gem 'sinatra'
 gem 'twilio-ruby'
 gem 'chronic'
 gem "sinatra-activerecord"
-gem "mysql2"
 gem "rake"
 gem "pg"
