@@ -2,6 +2,4 @@ development:
   adapter: postgresql
   host: localhost
   database: lunchmeet
-  username: <%= ENV['PG_USER'] %>
-  password: <%= ENV['PG_PASS'] %>
   host: localhost

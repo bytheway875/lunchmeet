@@ -1,1 +1,2 @@
-web: bundle exec ruby ruby.rb -p $PORT
+web: bundle exec ruby app.rb -p $PORT
+postgresql: postgres -D vendor/postgresql

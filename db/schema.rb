@@ -13,28 +13,31 @@
 
 ActiveRecord::Schema.define(version: 20150515144955) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "event_types", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "events", force: :cascade do |t|
-    t.string   "name",           limit: 255
-    t.string   "location",       limit: 255
+    t.string   "name"
+    t.string   "location"
     t.datetime "start_datetime"
-    t.integer  "event_type_id",  limit: 4
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "event_type_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "first_name",   limit: 255
-    t.string   "last_name",    limit: 255
-    t.string   "cell_phone",   limit: 255
-    t.integer  "user_type_id", limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "cell_phone"
+    t.integer  "user_type_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
 end
