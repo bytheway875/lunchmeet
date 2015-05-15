@@ -27,12 +27,14 @@ get '/receive_messages' do
   elsif sms_count == 2
     if body.downcase == 'yes'
       twiml = Twilio::TwiML::Response.new do |r|
-        r.Message "okay, we'll find someone to hang out with you."
+        r.Message "okay, we'll find someone to hang out with you for #{session['event']} on #{session['date']}."
       end
+    session['counter'] += 1
     else
       twiml = Twilio::TwiML::Response.new do |r|
-        r.Message "so i guess we wont schedule lunch."
+        r.Message "okay, then tell me what you want to do."
       end
+      session['counter'] = 0
     end
   elsif sms_count > 2
     session['counter'] = 0
