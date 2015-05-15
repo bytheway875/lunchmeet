@@ -11,9 +11,10 @@ get '/' do
 end
 
 get '/receive_messages' do
+  sms_count = session['counter'] ||= 1
+
   body = params[:Body]
 
-  sms_count = session['counter'] ||= 1
   if sms_count == 1
     response = ParseText.new(body).response
     twiml = Twilio::TwiML::Response.new do |r|
@@ -34,10 +35,10 @@ get '/receive_messages' do
       twiml = Twilio::TwiML::Response.new do |r|
         r.Message "okay, then tell me what you want to do."
       end
-      session['counter'] = 0
+      session['counter'] = 1
     end
   elsif sms_count > 2
-    session['counter'] = 0
+    session['counter'] = 1
     twiml = Twilio::TwiML::Response.new do |r|
       r.Message "we're resetting your session. something messed up."
     end
