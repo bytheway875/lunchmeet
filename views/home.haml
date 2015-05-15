@@ -1,0 +1,20 @@
+%h1 Welcome to Lunchmeet
+%p
+  Have lunch with someone new today!
+
+%h3
+  1.
+  %a(href='/sign_up') Sign Up
+
+%h3
+  2.
+  Text (832)742-1825 with your request and we'll find you a lunch or happy hour friend.
+
+%p ex. "I want to go to LUNCH on TUESDAY" or "I want to get a DRINK TODAY"
+
+%p
+  - User.all.each do |user|
+    = user.name
+    = user.cell_phone
+    = user.asl_proficiency
+    %br

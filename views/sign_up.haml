@@ -1,0 +1,19 @@
+%h1
+  Sign Up
+
+%form{ :action => "sign_up", :method => "post"}
+  %fieldset
+    %ul
+      %li
+        %label{:for => "name"} Name:
+        %input{:type => "text", :name => "name", :class => "text"}
+      %li
+        %label{:for => "phone"} Cell Phone Number:
+        %input{:type => "text", :name => "cell_phone", :class => "text"}
+      %li
+        %label{:for => "asl_proficiency"} ASL Level:
+        %input{type: "radio", name: "asl_proficiency", value: 'novice', class: "text" } Novice
+        %input{type: "radio", name: "asl_proficiency", value: "intermediate" } Intermediate
+        %input{type: "radio", name: "asl_proficiency", value: "advanced" } Advanced
+        %input{type: "radio", name: "asl_proficiency", class: "fluent" } Fluent
+    %input{:type => "submit", :value => "Sign Up", :class => "button"}

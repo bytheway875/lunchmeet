@@ -2,9 +2,10 @@ require 'rubygems'
 require 'sinatra'
 require 'twilio-ruby'
 require './parse_text'
+require 'haml'
 require 'sinatra/activerecord'
 require './config/environments'
-
+require './models/user'
 
 
 enable :sessions
@@ -12,6 +13,16 @@ enable :sessions
 get '/' do
   'Hello World! Currently running version ' + Twilio::VERSION + \
   ' of the twilio-ruby library.'
+  haml :home
+end
+
+get '/sign_up' do
+  haml :sign_up
+end
+
+post '/sign_up' do
+  user = User.new(params)
+  user.save
 end
 
 get '/receive_messages' do

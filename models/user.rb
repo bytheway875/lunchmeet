@@ -1,4 +1,4 @@
-class User < Sinatra::Base
-register Sinatra::ActiveRecordExtension
+class User < ActiveRecord::Base
+
 
 end
