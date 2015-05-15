@@ -1,9 +1,6 @@
-  adapter: mysql2
-  host: localhost
-  encoding: utf8
-  reconnect: false
-  database: lunchmeet
-  pool: 5
-  username: root
-  password: lm2626
-  socket: /tmp/mysql.sock
+# This is a sample database file for the DataMapper ORM
+:development: &defaults
+  # These are the settings for repository :default
+  :adapter:  postgres
+  :database: lunchmeet
+  :host:     localhost
