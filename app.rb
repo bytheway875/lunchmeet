@@ -7,7 +7,6 @@ require 'sinatra/activerecord'
 require './config/environments'
 require './models/user'
 
-
 enable :sessions
 
 get '/' do
@@ -21,8 +20,37 @@ get '/sign_up' do
 end
 
 post '/sign_up' do
-  user = User.new(params)
-  user.save
+  user = User.create(params)
+
+  account_sid = ENV['TWILIO_SID']
+  auth_token = ENV['TWILIO_AUTH']
+  client = Twilio::REST::Client.new(account_sid, auth_token)
+
+  client.account.messages.create(
+    :from => "+18327421825",
+    :to => user.cell_phone,
+    :body => "Hey #{user.first_name}, Welcome to LunchMeet. Your verification code is #{user.verification_code}."
+  )
+  redirect "/verify?user=#{user.id}"
+end
+
+get '/verify' do
+  @user = User.find(params[:user])
+  haml :verify
+end
+
+post '/verify' do
+  @user = User.find(params[:user_id])
+  if @user.verification_code == params[:verification_code]
+    @user.update(verification_code: true)
+    redirect "/start_texting"
+  else
+    redirect back
+  end
+end
+
+get "/start_texting" do
+  "You're verified!! You can start texting +1-832-742-1825 to start planning lunch and happy hours with coworkers."
 end
 
 get '/receive_messages' do
@@ -42,6 +70,7 @@ get '/receive_messages' do
     end
   elsif sms_count == 2
     if body.downcase == 'yes'
+      event = Event.new(date: session['date'], event: session['event'])
       twiml = Twilio::TwiML::Response.new do |r|
         r.Message "okay, we'll find someone to hang out with you for #{session['event']} on #{session['date']}."
       end
@@ -60,27 +89,4 @@ get '/receive_messages' do
   end
 
   twiml.text
-end
-
-get '/test_message' do
-  account_sid = ENV['TWILIO_SID']
-  auth_token = ENV['TWILIO_AUTH']
-  client = Twilio::REST::Client.new(account_sid, auth_token)
-
-  from = "+18327421825"
-
-  friends = {
-      "+18324658840" => "Shannon",
-      "+15205088375" => "Lakeida"
-  }
-  friends.each do |key, value|
-    client.account.messages.create(
-        :from => from,
-        :to => key,
-        :body => "Hey #{value}, Monkey party at 6PM. Bring Bananas!"
-    )
-  end
-
-  "Texts sent"
-
 end

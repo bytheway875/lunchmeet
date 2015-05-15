@@ -1,0 +1,15 @@
+%h1 Verify Your Account
+
+%h3 Verification text sent to #{@user.pretty_cell_phone}.
+
+%p Please enter the code you receive below to verify your phone number.
+
+%form{ :action => "verify", :method => "post"}
+  %fieldset
+    %ul
+      %li
+        %label{ for: "verification_code" } Verification Code:
+        %input{ type: "text", name: "verification_code", class: "text" }
+
+        %input{ type: "hidden", name: "user_id", value: @user.id }
+    %input{ type: "submit", value: "Sign Up", class: "button" }

@@ -14,7 +14,10 @@
 
 %p
   - User.all.each do |user|
+    = user.id
     = user.name
     = user.cell_phone
     = user.asl_proficiency
+    = user.verification_code
+    = user.verified
     %br

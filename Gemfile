@@ -6,4 +6,5 @@ gem 'chronic'
 gem "sinatra-activerecord"
 gem "rake"
 gem "pg"
-gem 'haml'
+gem "haml"
+gem "phone"
