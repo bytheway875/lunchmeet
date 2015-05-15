@@ -10,7 +10,7 @@ class ParseText
   end
 
   def find_date
-    @date = Chronic.parse(body).try(:to_date)
+    @date = Chronic.parse(body).to_date
     @readable_date = readable_date
   end
 

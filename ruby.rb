@@ -10,24 +10,28 @@ get '/' do
   ' of the twilio-ruby library.'
 end
 
-get 'receive_messages' do
+get '/receive_messages' do
   body = params[:Body]
 
   sms_count = session['counter'] ||= 1
   if sms_count == 1
     response = ParseText.new(body).response
     twiml = Twilio::TwiML::Response.new do |r|
-      r.Message response.message
+      r.Message response[:message]
     end
-    if response.valid
+    if response[:valid]
       session['counter'] += 1
-      session['date'] = response.date
-      session['event'] = response.event
+      session['date'] = response[:date]
+      session['event'] = response[:event]
     end
   elsif sms_count == 2
     if body.downcase == 'yes'
       twiml = Twilio::TwiML::Response.new do |r|
         r.Message "okay, we'll find someone to hang out with you."
+      end
+    else
+      twiml = Twilio::TwiML::Response.new do |r|
+        r.Message "so i guess we wont schedule lunch."
       end
     end
   elsif sms_count > 2
