@@ -4,23 +4,24 @@ class ParseText
   attr_accessor :date, :event
   attr_accessor :readable_date
   def initialize(body)
-    @body = body
+    @body = body.downcase
     find_date
     find_event
   end
 
   def find_date
-    @date = Chronic.parse(body).to_date
+    @date = Chronic.parse(body).try(:to_date)
     @readable_date = readable_date
   end
 
   def find_event
-    happy_hour = /(happy hour|happyhour|drinks|drink)/.match(body.downcase).to_a.first ? 'happy hour' : nil
+    happy_hour = /(happy hour|happyhour|drinks|drink)/.match(body).to_a.first ? 'happy hour' : nil
     lunch = /(lunch|food|a meal)/.match(body).to_a.first ? 'lunch' : nil if @event.nil?
     @event = happy_hour || lunch
   end
 
   def readable_date
+    return nil unless date
     case
     when date == Date.today
       "today"

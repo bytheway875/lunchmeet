@@ -1,0 +1,8 @@
+adapter: mysql2
+host: localhost
+encoding: utf8
+reconnect: false
+database: lunchmeet
+pool: 5
+username: root
+socket: /tmp/mysql.sock
