@@ -1,0 +1,18 @@
+<h2><%= @title %></h2>
+<br/>
+<form action="/users" method="post"role="form">
+ <div class="form-group">
+   <label for="user_first_name">First name:</label>
+   <br>
+   <input id="user_first_name" class="form-control" name="user[first_name]" type="text" value="<%= @user.first_name %>" style="width=90%"/>
+   <br>
+   <label for="user_last_name">Last name:</label>
+   <br>
+   <input id="user_last_name" class="form-control" name="user[last_name]" type="text" value="<%= @user.last_name %>" style="width=90%"/>
+   <br>
+      <label for="user_cell_phone">Cell Phone:</label>
+   <br>
+   <input id="user_cell_phone" class="form-control" name="user[cell_phone]" type="text" value="<%= @user.cell_phone %>" style="width=90%"/>
+ </div>
+ <button type="submit" class="btn btn-info">Join</button>
+</form>

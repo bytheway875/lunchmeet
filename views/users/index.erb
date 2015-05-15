@@ -1,0 +1,8 @@
+<ul>
+<% @users.each do |user| %>
+ <li>
+   <h4><a class="members" href="/users/<%= user.id %>"><%= user.first_name %> <%= user.last_name %></a></h4>
+   <p>ASL Proficiency: NOT SET YET</p>
+ </li>
+<% end %>
+</ul>
